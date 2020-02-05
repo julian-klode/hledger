@@ -1,4 +1,4 @@
-name: hledger
+name: hledger-jak
 summary: An easy-to-use command-line/curses/web plaintext accounting tool
 description: |
   hledger is a computer program for easily tracking money, time, or other commodities,
