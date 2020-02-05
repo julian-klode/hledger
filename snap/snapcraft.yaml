@@ -1,0 +1,58 @@
+name: hledger
+summary: An easy-to-use command-line/curses/web plaintext accounting tool
+description: |
+  hledger is a computer program for easily tracking money, time, or other commodities,
+  on unix, mac and windows (and web-capable mobile devices, to some extent).
+
+  It is first a command-line tool, but there are also terminal and
+  web interfaces, and a Haskell library
+  (http://hackage.haskell.org/package/hledger-lib) for building your own
+  programs and scripts (hledger is written in Haskell).  hledger was
+  inspired by and is largely compatible with Ledger.  hledger is free
+  software available under the GNU General Public License v3+.
+
+  hledger aims to help both computer experts and regular folks
+  to gain clarity and control in their finances and time management,
+  but currently it is a bit more suited to techies.
+  I use it every day to:
+
+  -   track spending and income
+  -   see time reports by day/week/month/project
+  -   get accurate numbers for client billing and tax filing
+  -   track invoices
+
+  Though limited in features, hledger is lightweight, usable and reliable.
+  For some, it is a simpler, less distracting, more future-proof alternative to Quicken or GnuCash.
+
+version: git
+base: core18
+grade: stable
+confinement: strict
+
+apps:
+  hledger:
+    command: usr/bin/hledger
+    plugs: [home, removable-media]
+  hledger-web:
+    command: usr/bin/hledger-web
+    plugs: [home, removable-media]
+  hledger-ui:
+    command: usr/bin/hledger-ui
+    plugs: [home, removable-media]
+
+parts:
+  hledger:
+    plugin: dump
+    source: .
+    build-packages:
+      - cabal-install
+      - libffi-dev
+      - libgmp-dev
+      - zlib1g-dev
+      - libtinfo-dev
+    override-build: |
+      ./cabal-install.sh
+      install -d $SNAPCRAFT_PART_INSTALL/usr/bin
+      install .cabal-sandbox/bin/hledger $SNAPCRAFT_PART_INSTALL/usr/bin
+      install .cabal-sandbox/bin/hledger-web $SNAPCRAFT_PART_INSTALL/usr/bin
+      install .cabal-sandbox/bin/hledger-ui $SNAPCRAFT_PART_INSTALL/usr/bin
