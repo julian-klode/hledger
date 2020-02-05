@@ -50,6 +50,8 @@ parts:
       - libgmp-dev
       - zlib1g-dev
       - libtinfo-dev
+    stage-packages:
+      - locales-all
     override-build: |
       ./cabal-install.sh
       install -d $SNAPCRAFT_PART_INSTALL/usr/bin
