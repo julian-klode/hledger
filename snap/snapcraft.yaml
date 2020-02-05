@@ -33,12 +33,18 @@ apps:
   hledger:
     command: usr/bin/hledger
     plugs: [home, removable-media]
+    environment:
+      LANG: C.UTF-8
   hledger-web:
     command: usr/bin/hledger-web
     plugs: [home, removable-media]
+    environment:
+      LANG: C.UTF-8
   hledger-ui:
     command: usr/bin/hledger-ui
     plugs: [home, removable-media]
+    environment:
+      LANG: C.UTF-8
 
 parts:
   hledger:
@@ -50,9 +56,14 @@ parts:
       - libgmp-dev
       - zlib1g-dev
       - libtinfo-dev
-    stage-packages:
-      - locales-all
+      - squid
     override-build: |
+      # See comments in snap/squid.conf
+      [ "$http_proxy" ] && {
+        squid3 -f snap/squid.conf
+        export http_proxy="http://localhost:8888"
+        sleep 3
+      }
       ./cabal-install.sh
       install -d $SNAPCRAFT_PART_INSTALL/usr/bin
       install .cabal-sandbox/bin/hledger $SNAPCRAFT_PART_INSTALL/usr/bin
